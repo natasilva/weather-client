@@ -8,10 +8,11 @@ import { WeatherService } from 'src/app/services/weather.service';
   styleUrls: ['./index.component.scss']
 })
 export class IndexComponent implements OnInit {
-  form: FormControl
+  formCity: FormControl
   data: any
   cities: any[] = []
   loading: { [key: string]: any } = {}
+
   constructor(
     private weatherService: WeatherService,
     private fb: FormBuilder
@@ -19,17 +20,18 @@ export class IndexComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.form = this.fb.control(null, Validators.required);
+    this.formCity = this.fb.control(null, Validators.required);
 
-    this.loadCities()
+    this.formCity.valueChanges.subscribe((val) => this.loadWeather(val))
+
     this.loadWeather()
+    this.loadCities()
   }
 
   
-  async loadWeather() {
+  async loadWeather(val?: any) {
     try {
-      this.data = await this.weatherService.getWeatherByCity({ city: 'Campinas' })
-      console.log(this.data)
+      this.data = await this.weatherService.getWeatherByCity({ city: val || 'São Paulo' })
     } catch (error) {
       console.log(error)
     }
