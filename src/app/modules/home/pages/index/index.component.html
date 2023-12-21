@@ -2,82 +2,48 @@
     <div class="w-100 h-50 px-5 d-flex align-items-center pe-5">
         <div class="w-100 d-flex justify-content-between text-white">
             <div class="d-flex flex-column text-center">
-                <span class="fs-4"> Cidade </span>
-                <span class="fs-3"> May 5 </span>
-                <span class="fs-1"> 12 : 35 </span>
-                <span class="fs-4"> Nublado </span>
+                <span class="fs-4"> {{ data?.city }} </span>
+                <span class="fs-3"> {{ data?.date }} </span>
+                <span class="fs-4"> {{ data?.time }} (última atualização) </span>
+                <span class="fs-3"> {{ data?.description }} </span>
+            </div>
+            <div>
+                <form nz-form [formControl]="form" nzLayout="vertical">
+                    <!-- id_city: [null, null] -->
+                    <nz-form-item>
+                        <nz-form-control [nzErrorTip]="cityErrorTpl">
+                            <nz-select nzPlaceHolder="Cidade" nzAllowClear nzShowSearch formControlName="id_city"
+                                (nzOnSearch)="searchCities($event)" id="id_city">
+                                <ng-container *ngFor="let city of cities?.rows">
+                                    <nz-option *ngIf="!loading['cities_search']" [nzValue]="city.id" [nzLabel]="city.name">
+                                    </nz-option>
+                                </ng-container>
+                                <nz-option *ngIf="loading['cities_search']" nzDisabled nzCustomContent>
+                                    <i nz-icon nzType="loading" class="loading-icon"></i> Carregando...
+                                </nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
             </div>
             <div class="d-flex flex-column text-center">
-                <span class="fs-4 text-start"> Pressão: 1021hpA</span>
-                <span class="fs-4 text-start"> Amanhecer: 6:36 </span>
-                <span class="fs-4 text-start"> Pôr do sol: 18:03 </span>
-                <span class="fs-1 text-center"> +20°C </span>
+                <span class="fs-4 text-start"> Vento: {{ data?.wind_speedy }}</span>
+                <span class="fs-4 text-start"> Amanhecer: {{ data?.sunrise }} </span>
+                <span class="fs-4 text-start"> Pôr do sol: {{ data?.sunset }} </span>
+                <span class="fs-1 text-center"> {{ data?.temp }} ° </span>
             </div>
         </div>
     </div>
     <div class="w-100 h-50 d-flex overflow-x-auto text-nowrap cards">
-        <div class="card text-white border-primary d-flex h-100 me-3 fs-2 px-4 d-flex flex-column align-items-center justify-content-center">
-            <span>SUN</span>
-            <span>
-                <img src="https://assets.hgbrasil.com/weather/icons/conditions/rain.svg" class="routers">
-            </span>
-            <span>20° C</span>
-            <span>10° C</span>
-        </div>
-
-        <div class="card text-white border-primary d-flex h-100 me-3 fs-2 px-4 d-flex flex-column align-items-center justify-content-center">
-            <span>SUN</span>
-            <span>
-                <img src="https://assets.hgbrasil.com/weather/icons/conditions/rain.svg" class="routers">
-            </span>
-            <span>20° C</span>
-            <span>10° C</span>
-        </div>
-
-        <div class="card text-white border-primary d-flex h-100 me-3 fs-2 px-4 d-flex flex-column align-items-center justify-content-center">
-            <span>SUN</span>
-            <span>
-                <img src="https://assets.hgbrasil.com/weather/icons/conditions/rain.svg" class="routers">
-            </span>
-            <span>20° C</span>
-            <span>10° C</span>
-        </div>
-
-        <div class="card text-white border-primary d-flex h-100 me-3 fs-2 px-4 d-flex flex-column align-items-center justify-content-center">
-            <span>SUN</span>
-            <span>
-                <img src="https://assets.hgbrasil.com/weather/icons/conditions/rain.svg" class="routers">
-            </span>
-            <span>20° C</span>
-            <span>10° C</span>
-        </div>
-
-        <div class="card text-white border-primary d-flex h-100 me-3 fs-2 px-4 d-flex flex-column align-items-center justify-content-center">
-            <span>SUN</span>
-            <span>
-                <img src="https://assets.hgbrasil.com/weather/icons/conditions/rain.svg" class="routers">
-            </span>
-            <span>20° C</span>
-            <span>10° C</span>
-        </div>
-
-        <div class="card text-white border-primary d-flex h-100 me-3 fs-2 px-4 d-flex flex-column align-items-center justify-content-center">
-            <span>SUN</span>
-            <span>
-                <img src="https://assets.hgbrasil.com/weather/icons/conditions/rain.svg" class="routers">
-            </span>
-            <span>20° C</span>
-            <span>10° C</span>
-        </div>
-
-        <div class="card text-white border-primary d-flex h-100 me-3 fs-2 px-4 d-flex flex-column align-items-center justify-content-center">
-            <span>SUN</span>
-            <span>
-                <img src="https://assets.hgbrasil.com/weather/icons/conditions/rain.svg" class="routers">
-            </span>
-            <span>20° C</span>
-            <span>10° C</span>
-        </div>
-
+        <ng-container *ngFor="let forecast of data?.forecast; let idx = index">
+            <div *ngIf="idx < 7" class="card text-white border-primary d-flex h-100 me-3 fs-2 px-4 d-flex flex-column align-items-center justify-content-center">
+                <span>{{ forecast?.weekday }}</span>
+                <span>
+                    <img [src]="'https://assets.hgbrasil.com/weather/icons/conditions/' + forecast?.condition + '.svg'" class="routers">
+                </span>
+                <span>{{ forecast?.max }} °</span>
+                <span>{{ forecast?.min }} °</span>
+            </div>
+        </ng-container>
     </div>
 </div>
