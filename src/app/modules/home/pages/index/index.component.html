@@ -1,42 +1,55 @@
-<div class="w-100 h-100 d-flex flex-column py-3">
-    <div class="w-100 h-50 px-5 d-flex align-items-center pe-5">
-        <div class="w-100 d-flex justify-content-between text-white">
-            <div class="d-flex flex-column text-center me-5">
+<div class="main-div w-100 h-100 d-flex flex-column py-3">
+    <div class="w-100 d-flex justify-content-center">
+        <div class="w-50">
+            <form nz-form nzLayout="vertical">
+                <nz-form-item>
+                    <nz-select class="custom-nz-select" nzPlaceHolder="Cidade" nzAllowClear nzShowSearch [formControl]="formCity"
+                        [nzSize]="'large'" id="city">
+                        <ng-container *ngFor="let city of cities">
+                            <nz-option *ngIf="!loading['cities_search']" [nzValue]="city.nome" [nzLabel]="city.nome">
+                            </nz-option>
+                        </ng-container>
+                        <nz-option *ngIf="loading['cities_search']" nzDisabled nzCustomContent>
+                            <i nz-icon nzType="loading" class="loading-icon"></i> Carregando...
+                        </nz-option>
+                    </nz-select>
+                </nz-form-item>
+            </form>
+        </div>
+    </div>
+    <div class="w-100 h-auto px-5 pe-5">
+        <div class="w-100 row flex-column flex-md-row">
+            <div class="col-md card d-flex flex-column text-center me-5 p-3 text-white border-white">
                 <span class="fs-4"> {{ data?.city }} </span>
-                <span class="fs-3"> {{ data?.date }} </span>
+                <span class="fs-4"> {{ data?.date }} </span>
                 <span class="fs-4"> {{ data?.time }} (última atualização) </span>
                 <span class="fs-3"> {{ data?.description }} </span>
             </div>
-            <div class="w-50">
-                <form nz-form nzLayout="vertical">
-                    <nz-form-item>
-                        <nz-select nzPlaceHolder="Cidade" nzAllowClear nzShowSearch [formControl]="formCity"
-                            [nzSize]="'large'" id="city">
-                            <ng-container *ngFor="let city of cities">
-                                <nz-option *ngIf="!loading['cities_search']" [nzValue]="city.nome" [nzLabel]="city.nome">
-                                </nz-option>
-                            </ng-container>
-                            <nz-option *ngIf="loading['cities_search']" nzDisabled nzCustomContent>
-                                <i nz-icon nzType="loading" class="loading-icon"></i> Carregando...
-                            </nz-option>
-                        </nz-select>
-                    </nz-form-item>
-                </form>
+
+            <div class="col-md card d-flex flex-column text-center me-5 mt-3 p-3 mt-md-0 text-white border-white">
+                <span class="fs-4"> Nebulosidade: {{ data?.cloudiness }}% </span>
+                <span class="fs-4"> Chuva {{ data?.rain }}% </span>
+                <span class="fs-4"> Umidade: {{ data?.humidity }}% </span>
+                <span>
+                    <span class="fs-3"> Fase da Lua: </span>
+                    <img class="moon" [src]="'https://assets.hgbrasil.com/weather/icons/moon/' + data?.moon_phase + '.png'">
+                </span>
             </div>
-            <div class="d-flex flex-column text-center ms-5">
-                <span class="fs-4 text-start"> Vento: {{ data?.wind_speedy }}</span>
-                <span class="fs-4 text-start"> Amanhecer: {{ data?.sunrise }} </span>
-                <span class="fs-4 text-start"> Pôr do sol: {{ data?.sunset }} </span>
-                <span class="fs-1 text-center"> {{ data?.temp }} ° </span>
+
+            <div class="col-md card d-flex flex-column text-center p-3 mt-3 mt-md-0 text-white border-white">
+                <span class="fs-4"> Vento: {{ data?.wind_speedy }}</span>
+                <span class="fs-4"> Amanhecer: {{ data?.sunrise }} </span>
+                <span class="fs-4"> Pôr do sol: {{ data?.sunset }} </span>
+                <span class="fs-1"> Temperatura: {{ data?.temp }} ° </span>
             </div>
         </div>
     </div>
-    <div class="w-100 h-50 d-flex overflow-x-auto text-nowrap cards">
+    <div class="w-100 h-50 d-flex overflow-x-auto text-nowrap cards mt-4">
         <ng-container *ngFor="let forecast of data?.forecast; let idx = index">
-            <div *ngIf="idx < 7" class="card text-white border-primary d-flex h-100 me-3 fs-2 px-4 d-flex flex-column align-items-center justify-content-center">
+            <div *ngIf="idx < 7" class="card forecast text-white border-white me-3 fs-2 px-4 py-2 d-flex flex-column align-items-center justify-content-center">
                 <span>{{ forecast?.weekday }}</span>
                 <span>
-                    <img [src]="'https://assets.hgbrasil.com/weather/icons/conditions/' + forecast?.condition + '.svg'" class="routers">
+                    <img [src]="'https://assets.hgbrasil.com/weather/icons/conditions/' + forecast?.condition + '.svg'">
                 </span>
                 <span>{{ forecast?.max }} °</span>
                 <span>{{ forecast?.min }} °</span>

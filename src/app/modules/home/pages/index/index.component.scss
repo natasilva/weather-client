@@ -4,8 +4,24 @@
     }
 }
 
-.card {
+.forecast {
     flex: 0 0 auto;
-    width: 150px;
-    background-color: RGBA(0,191,255,.6);
+    min-width: 150px;
+    min-height: 350px;
+}
+
+.cards {
+    height: 400px;
+}
+
+.card {
+    background-color: RGBA(127,255,212,.0);
+}
+
+.custom-nz-select ::ng-deep .ant-select-selector {
+    background-color: transparent !important;
+}
+
+.moon {
+    width: 50px;
 }

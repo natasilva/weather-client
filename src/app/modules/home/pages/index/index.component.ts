@@ -19,7 +19,6 @@ export class IndexComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     this.formCity = this.fb.control(null, Validators.required);
 
     this.formCity.valueChanges.subscribe((val) => this.loadWeather(val))
@@ -28,8 +27,7 @@ export class IndexComponent implements OnInit {
     this.loadCities()
   }
 
-  
-  async loadWeather(val?: any) {
+  async loadWeather(val?: string) {
     try {
       this.data = await this.weatherService.getWeatherByCity({ city: val || 'São Paulo' })
     } catch (error) {
@@ -40,7 +38,6 @@ export class IndexComponent implements OnInit {
   async loadCities() {
     try {
       this.cities = await this.weatherService.listCities()
-      console.log(this.data)
     } catch (error) {
       console.log(error)
     }
